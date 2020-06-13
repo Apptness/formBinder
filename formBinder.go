@@ -11,7 +11,6 @@ import (
 
 const tagName = "form"
 
-
 type Error struct {
 	err error
 }
@@ -458,15 +457,7 @@ func (dec *Decoder) decode() error {
 	case reflect.Struct:
 		switch dec.curr.Interface().(type) {
 		case time.Time:
-			d := dec.values[0]
-			var t time.Time
-			var err error
-			// Parsing RFC3339 is ~3 times more expensive than "2006-01-02", check first if it complies, then attempt best route
-			if len(d) > 10 && d[10] == 'T' {
-				t, err = time.Parse(time.RFC3339, d)
-			} else {
-				t, err = time.Parse("2006-01-02", d)
-			}
+			t, err := time.Parse("2006-01-02", dec.values[0])
 			if err != nil {
 				return newError(fmt.Errorf("the value of field \"%v\" in path \"%v\" is not a valid datetime", dec.field, dec.path))
 			}
@@ -489,10 +480,13 @@ func (dec *Decoder) decode() error {
 					return nil
 				}
 			*/
-			return newError(fmt.Errorf("not supported type for field \"%v\" in path \"%v\". Maybe you should to include it the UnmarshalText interface or register it using custom type?", dec.field, dec.path))
+			// WTF:
+			// return newError(fmt.Errorf("not supported type for field \"%v\" in path \"%v\". Maybe you should to include it the UnmarshalText interface or register it using custom type?", dec.field, dec.path))
 		}
 	default:
-		return newError(fmt.Errorf("not supported type for field \"%v\" in path \"%v\"", dec.field, dec.path))
+		// WTF:
+		// return newError(fmt.Errorf("not supported type for field \"%v\" in path \"%v\"", dec.field, dec.path))
+		return nil
 	}
 
 	return nil
@@ -534,8 +528,7 @@ func (dec *Decoder) findStructField() error {
 		return nil
 	}
 
-	// TODO FIXME: old "breaking code" for form submissions
-	//
+	// WTF
 	// return newError(fmt.Errorf("not found the field \"%v\" in the path \"%v\"", dec.field, dec.path))
 	return nil
 }
