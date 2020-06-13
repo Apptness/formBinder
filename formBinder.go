@@ -534,7 +534,10 @@ func (dec *Decoder) findStructField() error {
 		return nil
 	}
 
-	return newError(fmt.Errorf("not found the field \"%v\" in the path \"%v\"", dec.field, dec.path))
+	// TODO FIXME: old "breaking code" for form submissions
+	//
+	// return newError(fmt.Errorf("not found the field \"%v\" in the path \"%v\"", dec.field, dec.path))
+	return nil
 }
 
 // expandSlice expands the length and capacity of the current slice
